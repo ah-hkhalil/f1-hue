@@ -12,7 +12,7 @@ Usage:
 In-game: Settings → Telemetry Settings
          UDP Telemetry : On
          Broadcast Mode: Off
-         IP Address    : 10.0.40.66
+         IP Address    : YOUR RPI IP
          Port          : 20777
 """
 
@@ -30,20 +30,20 @@ from datetime import datetime
 # ─────────────────────────────────────────────
 config = {
     # IP address of your Philips Hue Bridge (find in your router or Hue app)
-    "bridge_ip":             "10.0.40.69",
+    "bridge_ip":             "HUE BRIDGE IP",
 
     # Hue API username — generated during setup (see README.md)
-    "hue_user":              "fvFqvEK4MgN5RgrYvOenFcygbiSQoXBkSlCRfCbf",
+    "hue_user":              "HUE API USERNAME",
 
     # Light ID to control — run the lights discovery command in README.md to find this
-    "light_id":              "10",
+    "light_id":              "LIGHT ID",
 
     # UDP port — must match the port set in the F1 25 telemetry settings
     "udp_port":              20777,
 
     # Your Xbox gamertag(s) as they appear in-game — used for fastest lap detection
-    # Add both if you use multiple accounts, e.g. ["Gamertag1", "Gamertag2"]
-    "player_gamertags":      ["Hamilton443866", "Aang5732"],
+    # Add more if you use multiple accounts, e.g. ["Gamertag1", "Gamertag2"]
+    "player_gamertags":      ["GAMERTAG"],
 
     # How long (seconds) to flash white after chequered flag
     "chequered_duration":    10,
@@ -62,7 +62,7 @@ config = {
     "brightness":            254,
 
     # Seconds of silence from the Car Status packet before resetting flag state.
-    # Prevents getting stuck in flashing yellow when the game stops sending data.
+    # Prevents getting stuck when the game stops sending data.
     "packet_timeout":        3,
 }
 
