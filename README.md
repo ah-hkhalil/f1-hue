@@ -1,6 +1,6 @@
 # F1 25 → Philips Hue Flag Lights
 
-Control a Philips Hue light in real time based on flag states in F1 25. Runs on a Raspberry Pi on the same network as your Xbox and Hue Bridge.
+Control a Philips Hue light in real time based on flag states in F1 25. Runs on a Raspberry Pi on the same network as your Xbox, Game PC, etc and Hue Bridge.
 
 ## What it does
 
