@@ -265,3 +265,8 @@ All light changes are processed through a single worker thread fed by a queue, w
 - EA / Codemasters for publishing the [F1 25 UDP telemetry specification](https://forums.ea.com/en/f1/f1-25/)
 - Philips Hue for the local REST API
 - user: richardvinger for his Home Assistant version of this project: https://github.com/richardvinger/f1-25-telemetry-for-home-assistant/
+
+## Disclaimer
+
+- Use this script at your own risk.
+- No support or warranty is implied by making this script available.
