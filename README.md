@@ -27,11 +27,11 @@ Flag states are per-driver — yellow and blue only trigger when **your car** is
 
 ## What you need
 
-- Raspberry Pi (any model with Wi-Fi) running Raspberry Pi OS
+- Raspberry Pi running Raspberry Pi OS, Ubuntu, etc
 - Philips Hue Bridge (v2 recommended)
-- One or more Hue lights (light strips work particularly well)
+- One or more colour Hue lights 
 - Xbox running F1 25
-- All devices on the same Wi-Fi network
+- All devices on the same network
 
 ---
 
@@ -52,7 +52,7 @@ https://discovery.meethue.com
 ```
 This returns JSON containing your Bridge's IP address:
 ```json
-[{"id":"...","internalipaddress":"10.0.40.69"}]
+[{"id":"...","internalipaddress":"x.x.x.x"}]
 ```
 
 Note down the IP — you'll need it throughout the setup.
@@ -114,7 +114,7 @@ ID    Name                           Type                      On
 10    Gaming Strip                   Extended color light      True
 ```
 
-Note the ID of the light you want to control — a light strip in the gaming area works best.
+Note the ID of the light you want to control — must be a colour capable lamp.
 
 ---
 
@@ -125,17 +125,17 @@ Note the ID of the light you want to control — a light strip in the gaming are
 pip3 install requests --break-system-packages
 
 # Clone the repo
-git clone https://github.com/YOUR_USERNAME/f1-hue-lights.git
-cd f1-hue-lights
+git clone https://github.com/ah-hkhalil/f1-hue.git
+cd f1-hue
 ```
 
 Edit `f1_hue.py` and fill in the config section at the top:
 
 ```python
 config = {
-    "bridge_ip":        "10.0.40.69",       # your Bridge IP from Step 1
+    "bridge_ip":        "x.x.x.x",           # your Bridge IP from Step 1
     "hue_user":         "abc123XYZdef456",   # your API key from Step 2
-    "light_id":         "10",                # your light ID from Step 3
+    "light_id":         "x",                # your light ID from Step 3
     "player_gamertags": ["YourGamertag"],    # your Xbox gamertag as shown in-game
     ...
 }
@@ -154,7 +154,7 @@ In F1 25:
 | Broadcast Mode | Off |
 | IP Address | Your Pi's IP address |
 | UDP Port | 20777 |
-| Send Rate | 20Hz (or higher) |
+| Send Rate | 20Hz (or higher - I've been using 60Hz) |
 
 To find your Pi's IP address, run `hostname -I` on the Pi.
 
@@ -177,10 +177,10 @@ You should see:
 
 Waiting for packets...
 
-✓ Receiving telemetry from 192.168.1.x
+✓ Receiving telemetry from x.x.x.x
 ```
 
-Once you start a race the light will respond to flag states automatically.
+Once you start a race the light will respond to flag states automatically. If you want to have the script run automatically when you boot the Raspberry Pi, see Step 7.
 
 ---
 
@@ -258,3 +258,4 @@ All light changes are processed through a single worker thread fed by a queue, w
 
 - EA / Codemasters for publishing the [F1 25 UDP telemetry specification](https://forums.ea.com/en/f1/f1-25/)
 - Philips Hue for the local REST API
+- user: richardvinger for his Home Assistant version of this project: https://github.com/richardvinger/f1-25-telemetry-for-home-assistant/
