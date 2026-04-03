@@ -12,7 +12,7 @@ Usage:
 In-game: Settings → Telemetry Settings
          UDP Telemetry : On
          Broadcast Mode: Off
-         IP Address    : YOUR RPI IP
+         IP Address    : <your Raspberry Pi IP>
          Port          : 20777
 """
 
@@ -30,29 +30,29 @@ from datetime import datetime
 # ─────────────────────────────────────────────
 config = {
     # IP address of your Philips Hue Bridge (find in your router or Hue app)
-    "bridge_ip":             "HUE BRIDGE IP",
+    "bridge_ip":             "YOUR_BRIDGE_IP",
 
     # Hue API username — generated during setup (see README.md)
-    "hue_user":              "HUE API USERNAME",
+    "hue_user":              "YOUR_HUE_API_KEY",
 
     # Light ID to control — run the lights discovery command in README.md to find this
-    "light_id":              "LIGHT ID",
+    "light_id":              "YOUR_LIGHT_ID",
 
     # UDP port — must match the port set in the F1 25 telemetry settings
     "udp_port":              20777,
 
     # Your Xbox gamertag(s) as they appear in-game — used for fastest lap detection
-    # Add more if you use multiple accounts, e.g. ["Gamertag1", "Gamertag2"]
-    "player_gamertags":      ["GAMERTAG"],
+    # Add both if you use multiple accounts, e.g. ["Gamertag1", "Gamertag2"]
+    "player_gamertags":      ["YOUR_GAMERTAG"],
 
     # How long (seconds) to flash white after chequered flag
     "chequered_duration":    10,
 
     # How long (seconds) to show purple after setting fastest lap
-    "fastest_lap_duration":  5,
+    "fastest_lap_duration":  10,
 
     # How long (seconds) to show white after receiving a penalty
-    "penalty_duration":      3,
+    "penalty_duration":      10,
 
     # Flash speed in seconds for yellow and blue flags (lower = faster)
     "yellow_flash_speed":    0.3,
@@ -62,7 +62,7 @@ config = {
     "brightness":            254,
 
     # Seconds of silence from the Car Status packet before resetting flag state.
-    # Prevents getting stuck when the game stops sending data.
+    # Prevents getting stuck in flashing yellow when the game stops sending data.
     "packet_timeout":        3,
 }
 
@@ -321,15 +321,13 @@ _last_car_status_ts   = 0.0
 
 # ─────────────────────────────────────────────
 # WATCHDOG THREAD
-# Monitors Car Status packet arrival. If silent for packet_timeout
-# seconds, resets per-driver flag state to prevent getting stuck.
 # ─────────────────────────────────────────────
 def _watchdog():
     global _player_fia, _player_drs_allowed, _active_effect
     while True:
         time.sleep(1)
         if _last_car_status_ts == 0.0:
-            continue   # haven't received any packets yet
+            continue
         gap = time.time() - _last_car_status_ts
         if gap > config["packet_timeout"]:
             with _state_lock:
@@ -350,7 +348,7 @@ _watchdog_thread.start()
 #   1. Chequered flag    — event CHQF
 #   2. Red flag          — event RDFL (latched until session restart)
 #   3. Fastest lap       — event FTLP (player only, timed)
-#   4. Penalty           — event PENA (timed)
+#   4. Penalty           — event PENA (player only, timed)
 #   5. Start lights      — events STLG / LGOT (with timeout fallback)
 #   6. Safety car        — session m_safetyCarStatus (full or virtual → solid yellow)
 #   7. Formation lap     — session m_safetyCarStatus == 3
@@ -492,7 +490,6 @@ def parse_car_status(payload, player_idx):
         return
     drs_allowed = payload[drs_offset]
 
-    # Update watchdog timestamp on every valid Car Status packet
     _last_car_status_ts = time.time()
 
     with _state_lock:
@@ -501,7 +498,6 @@ def parse_car_status(payload, player_idx):
         _player_drs_allowed = drs_allowed
         _apply()
 
-    # Trigger DRS flash on 0 → 1 transition, outside the lock
     if prev_drs == 0 and drs_allowed == 1:
         _trigger_drs_flash()
 
@@ -529,13 +525,22 @@ def parse_event(payload, player_idx):
         return
     code = bytes(payload[0:4])
 
-    if code == EV_PENALTY:
+    if code == EV_PENALTY and len(payload) >= 7:
+        # payload[4] = penaltyType, payload[5] = infringementType, payload[6] = vehicleIdx
+        vehicle_idx = payload[6]
         with _state_lock:
-            if _penalty_active:
-                return
-            log(WHITE, "⬜ PENALTY ISSUED", "solid white")
-            _penalty_active = True
-            _apply()
+            driver_name = _participants.get(vehicle_idx, "")
+        is_player = (vehicle_idx == player_idx or
+                     driver_name in config["player_gamertags"])
+        if is_player:
+            with _state_lock:
+                if _penalty_active:
+                    return
+                log(WHITE, "⬜ PENALTY ISSUED", "solid white")
+                _penalty_active = True
+                _apply()
+        else:
+            log(DIM, f"Penalty: {driver_name or vehicle_idx}", "(not your driver)")
 
     elif code == EV_START_LIGHTS and len(payload) >= 5:
         num_lights = payload[4]
