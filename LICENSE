@@ -1,0 +1,44 @@
+MIT License
+
+Copyright (c) 2025
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+DISCLAIMER
+
+This project is an independent, unofficial hobby project and is not affiliated
+with, endorsed by, or supported by Electronic Arts Inc., Codemasters, Formula
+One World Championship Limited, Formula 1, Signify (Philips Hue), or any
+other company or rights holder.
+
+F1®, Formula 1®, and related marks are trademarks of Formula One Licensing BV.
+F1 25 is developed by Codemasters and published by Electronic Arts Inc.
+Philips Hue is a trademark of Signify Holding.
+
+This software interacts with the F1 25 UDP telemetry output as documented in
+the publicly available EA/Codemasters UDP specification, and with the Philips
+Hue local REST API as documented in the publicly available Philips Hue
+developer documentation. No proprietary software, game files, or APIs have
+been reverse engineered or modified.
+
+This software is provided as-is with no warranty and no support. The author
+accepts no responsibility for any issues arising from its use. Bug reports
+and feature requests will not be actioned.
