@@ -109,9 +109,7 @@ DRS activatable is a non-interrupting overlay — pulses green then restores the
 ```
 f1_hue.py        — main script
 install.sh       — systemd service setup
-requirements.txt — pip dependencies (requests only)
 README.md        — end-user setup guide
-CHANGELOG.md     — version history
 CLAUDE.md        — this file
 LICENSE          — project licence
 .gitignore       — excludes credentials, caches, editor files
